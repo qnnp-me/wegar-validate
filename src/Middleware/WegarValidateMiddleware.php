@@ -19,7 +19,7 @@ use Wegar\Validate\Annotation\Method\POST;
 use Wegar\Validate\Annotation\Method\PUT;
 use Wegar\Validate\Annotation\Method\TRACE;
 
-class HttpMethodLimiterMiddleware implements MiddlewareInterface
+class WegarValidateMiddleware implements MiddlewareInterface
 {
   private array $attrs = [
     CONNECT::class,
@@ -43,30 +43,38 @@ class HttpMethodLimiterMiddleware implements MiddlewareInterface
 
         $method_ref = $controller_ref->getMethod($method);
         $use_notfound = !config('plugin.wegar.validate.app.throw', false);
-
-        if (!$this->checkMethod($method_ref)) {
+        $check_result = $this->checkMethod($method_ref);
+        if ($check_result === false) {
           if ($use_notfound) {
             throw new PageNotFoundException();
           }
           throw new BusinessException('Method not allowed', 405);
+        } else if (is_array($check_result)) {
+
         }
       }
     }
     return $handler($request);
   }
 
-  private function checkMethod(ReflectionMethod $action_ref): bool
+  private function checkMethod(ReflectionMethod $action_ref): bool|array
   {
-    $force = config('plugin.wegar.validate.app.force', true);
+    // 是否强制标注请求方式
+    $method_force = config('plugin.wegar.validate.app.force', true);
+    $method_matched = false;
+    // 验证结果收集
+    $validate_result = [];
     foreach ($action_ref->getAttributes() as $attribute) {
       if (in_array($attribute->getName(), $this->attrs + config('plugin.wegar.validate.app.methods', []))) {
-        $attr_instance = $attribute->newInstance();
-        if (property_exists($attr_instance, 'name') && request()->method() === $attr_instance->name) {
-          return true;
+        $attribute_instance = $attribute->newInstance();
+        if (!$method_matched && property_exists($attribute_instance, 'name') && request()->method() === $attribute_instance->name) {
+          $method_matched = true;
         }
-        $force = true;
+        // 因为含有注解，所以强制校验请求方式
+        $method_force = true;
       }
     }
-    return !$force;
+    // 请求方法验证结果
+    return $method_matched && !$method_force;
   }
 }
