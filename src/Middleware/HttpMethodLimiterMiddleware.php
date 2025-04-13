@@ -1,6 +1,6 @@
 <?php
 
-namespace Wegar\MethodLimit\Middleware;
+namespace Wegar\Validate\Middleware;
 
 use ReflectionClass;
 use ReflectionMethod;
@@ -9,15 +9,15 @@ use support\exception\PageNotFoundException;
 use Webman\Http\Request;
 use Webman\Http\Response;
 use Webman\MiddlewareInterface;
-use Wegar\MethodLimit\Annotation\Method\CONNECT;
-use Wegar\MethodLimit\Annotation\Method\DELETE;
-use Wegar\MethodLimit\Annotation\Method\GET;
-use Wegar\MethodLimit\Annotation\Method\HEAD;
-use Wegar\MethodLimit\Annotation\Method\OPTIONS;
-use Wegar\MethodLimit\Annotation\Method\PATCH;
-use Wegar\MethodLimit\Annotation\Method\POST;
-use Wegar\MethodLimit\Annotation\Method\PUT;
-use Wegar\MethodLimit\Annotation\Method\TRACE;
+use Wegar\Validate\Annotation\Method\CONNECT;
+use Wegar\Validate\Annotation\Method\DELETE;
+use Wegar\Validate\Annotation\Method\GET;
+use Wegar\Validate\Annotation\Method\HEAD;
+use Wegar\Validate\Annotation\Method\OPTIONS;
+use Wegar\Validate\Annotation\Method\PATCH;
+use Wegar\Validate\Annotation\Method\POST;
+use Wegar\Validate\Annotation\Method\PUT;
+use Wegar\Validate\Annotation\Method\TRACE;
 
 class HttpMethodLimiterMiddleware implements MiddlewareInterface
 {

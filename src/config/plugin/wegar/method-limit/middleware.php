@@ -1,6 +1,6 @@
 <?php
 
-use Wegar\MethodLimit\Middleware\HttpMethodLimiterMiddleware;
+use Wegar\Validate\Middleware\HttpMethodLimiterMiddleware;
 
 return [
   '' => [ // 如需超全局请手动设置，并谨慎设置！

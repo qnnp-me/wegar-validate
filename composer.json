@@ -1,15 +1,15 @@
 {
-  "name": "wegar/method-limit",
+  "name": "wegar/validate",
   "type": "library",
   "license": "MIT",
-  "description": "Webman plugin wegar/method-limit",
+  "description": "Webman plugin wegar/validate",
   "require": {
     "php": ">=8.0",
     "workerman/webman-framework": "^1.6.11|^2.1"
   },
   "autoload": {
     "psr-4": {
-      "Wegar\\MethodLimit\\": "src"
+      "Wegar\\Validate\\": "src"
     }
   }
 }

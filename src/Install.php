@@ -1,5 +1,5 @@
 <?php
-namespace Wegar\MethodLimit;
+namespace Wegar\Validate;
 
 class Install
 {

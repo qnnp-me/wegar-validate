@@ -1,4 +1,4 @@
-# Wegar Method Limiter
+# Wegar Validate
 
 > 通过注解来限制路由的请求方式，如未设置则自由访问； \
 > 如设置 app.force = true 则强制所有路由使用注解才能被访问
@@ -9,7 +9,7 @@
 ```php
 <?php
 
-use Wegar\MethodLimit\Annotation\Method\GET;
+use Wegar\Validate\Annotation\Method\GET;
 
 class ExampleController {
     /**

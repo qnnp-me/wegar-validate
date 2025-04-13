@@ -1,6 +1,6 @@
 <?php
 
-namespace Wegar\MethodLimit\Annotation\Method;
+namespace Wegar\Validate\Annotation\Method;
 
 use Attribute;
 
