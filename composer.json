@@ -1,0 +1,14 @@
+{
+  "name": "wegar/method-limit",
+  "type": "library",
+  "license": "MIT",
+  "description": "Webman plugin wegar/method-limit",
+  "require": {
+    "wegar/basic": "^1.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Wegar\\MethodLimit\\": "src"
+    }
+  }
+}
