@@ -9,7 +9,7 @@ class Install
      * @var array
      */
     protected static $pathRelation = array (
-  'config/plugin/wegar/method-limit' => 'config/plugin/wegar/method-limit',
+  'config/plugin/wegar/validate' => 'config/plugin/wegar/validate',
 );
 
     /**

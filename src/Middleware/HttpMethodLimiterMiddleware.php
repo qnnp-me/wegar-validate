@@ -42,7 +42,7 @@ class HttpMethodLimiterMiddleware implements MiddlewareInterface
       if ($controller_ref->hasMethod($method)) {
 
         $method_ref = $controller_ref->getMethod($method);
-        $use_notfound = !config('plugin.wegar.method-limit.app.throw', false);
+        $use_notfound = !config('plugin.wegar.validate.app.throw', false);
 
         if (!$this->checkMethod($method_ref)) {
           if ($use_notfound) {
@@ -57,9 +57,9 @@ class HttpMethodLimiterMiddleware implements MiddlewareInterface
 
   private function checkMethod(ReflectionMethod $action_ref): bool
   {
-    $force = config('plugin.wegar.method-limit.app.force', true);
+    $force = config('plugin.wegar.validate.app.force', true);
     foreach ($action_ref->getAttributes() as $attribute) {
-      if (in_array($attribute->getName(), $this->attrs + config('plugin.wegar.method-limit.app.methods', []))) {
+      if (in_array($attribute->getName(), $this->attrs + config('plugin.wegar.validate.app.methods', []))) {
         $attr_instance = $attribute->newInstance();
         if (property_exists($attr_instance, 'name') && request()->method() === $attr_instance->name) {
           return true;
