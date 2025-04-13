@@ -57,20 +57,16 @@ class HttpMethodLimiterMiddleware implements MiddlewareInterface
 
   private function checkMethod(ReflectionMethod $action_ref): bool
   {
-    $attrs = $action_ref->getAttributes();
-    $methods_marked = [];
-    foreach ($attrs as $attr) {
-      if (in_array($attr->getName(), $this->attrs + config('plugin.wegar.method-limit.app.methods', []))) {
-        $methods_marked[] = $attr->newInstance()->name;
+    $force = config('plugin.wegar.method-limit.app.force', true);
+    foreach ($action_ref->getAttributes() as $attribute) {
+      if (in_array($attribute->getName(), $this->attrs + config('plugin.wegar.method-limit.app.methods', []))) {
+        $attr_instance = $attribute->newInstance();
+        if (property_exists($attr_instance, 'name') && request()->method() === $attr_instance->name) {
+          return true;
+        }
+        $force = true;
       }
     }
-    $force = config('plugin.wegar.method-limit.app.force', true) || count($methods_marked) > 0;
-    if (in_array(request()->method(), $methods_marked)) {
-      return true;
-    }
-    if ($force) {
-      return false;
-    }
-    return true;
+    return !$force;
   }
 }
