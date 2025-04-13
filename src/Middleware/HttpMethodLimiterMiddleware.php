@@ -42,7 +42,7 @@ class HttpMethodLimiterMiddleware implements MiddlewareInterface
       if ($controller_ref->hasMethod($method)) {
 
         $method_ref = $controller_ref->getMethod($method);
-        $use_notfound = config('plugin.wegar.method-limit.app.throw', false);
+        $use_notfound = !config('plugin.wegar.method-limit.app.throw', false);
 
         if (!$this->checkMethod($method_ref)) {
           if ($use_notfound) {
