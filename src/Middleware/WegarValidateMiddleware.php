@@ -3,8 +3,9 @@
 namespace Wegar\Validate\Middleware;
 
 use ReflectionClass;
+use ReflectionException;
+use ReflectionFunction;
 use ReflectionMethod;
-use support\exception\BusinessException;
 use support\exception\PageNotFoundException;
 use Webman\Http\Request;
 use Webman\Http\Response;
@@ -18,10 +19,11 @@ use Wegar\Validate\Annotation\Method\PATCH;
 use Wegar\Validate\Annotation\Method\POST;
 use Wegar\Validate\Annotation\Method\PUT;
 use Wegar\Validate\Annotation\Method\TRACE;
+use Wegar\Validate\Helper\MethodHelper;
 
 class WegarValidateMiddleware implements MiddlewareInterface
 {
-  private array $attrs = [
+  protected array $attrs = [
     CONNECT::class,
     DELETE::class,
     GET::class,
@@ -35,46 +37,81 @@ class WegarValidateMiddleware implements MiddlewareInterface
 
   public function process(Request $request, callable $handler): Response
   {
-    $controller = $request->controller;
-    if ($controller && class_exists($controller)) {
-      $method = $request->action;
-      $controller_ref = new ReflectionClass($controller);
-      if ($controller_ref->hasMethod($method)) {
-
-        $method_ref = $controller_ref->getMethod($method);
-        $use_notfound = !config('plugin.wegar.validate.app.throw', false);
-        $check_result = $this->checkMethod($method_ref);
-        if ($check_result === false) {
-          if ($use_notfound) {
-            throw new PageNotFoundException();
-          }
-          throw new BusinessException('Method not allowed', 405);
-        } else if (is_array($check_result)) {
-
-        }
+    $callback = $this->getCallback();
+    $use_notfound = !config('plugin.wegar.validate.app.throw', false);
+    if (is_array($callback) && count($callback) === 2) {
+      $class = $callback[0];
+      if (class_exists($class)) {
+        $this->validateClassMethod($class, $callback[1], $use_notfound);
       }
+    } else {
+      $this->validateFunction($callback, $use_notfound);
     }
+
     return $handler($request);
   }
 
-  private function checkMethod(ReflectionMethod $action_ref): bool|array
+  protected function getCallback(): callable
   {
-    // 是否强制标注请求方式
+    return request()->route?->getCallback() ?: [request()->controller, request()->action];
+  }
+
+  protected function validateClassMethod(string $class, string $method, bool $use_notfound): void
+  {
+    try {
+      $reflection = new ReflectionClass($class);
+    } catch (ReflectionException $e) {
+      $this->handleError(true);
+    }
+    if ($reflection->hasMethod($method)) {
+      $methodRef = $reflection->getMethod($method);
+      if (!$this->checkMethod($methodRef)) {
+        $this->handleError($use_notfound);
+      }
+    } else {
+      $this->handleError(true);
+    }
+  }
+
+  protected function validateFunction(callable $callback, bool $use_notfound): void
+  {
+    try {
+      $functionRef = new ReflectionFunction($callback);
+    } catch (ReflectionException $e) {
+      $this->handleError(true);
+    }
+    if (!$this->checkMethod($functionRef)) {
+      $this->handleError($use_notfound);
+    }
+  }
+
+  protected function handleError(bool $use_notfound)
+  {
+    if ($use_notfound) throw new PageNotFoundException();
+    throw new PageNotFoundException('Method not allowed', 405);
+  }
+
+  protected function checkMethod(ReflectionMethod|ReflectionFunction $action_ref): bool
+  {
     $method_force = config('plugin.wegar.validate.app.force', true);
     $method_matched = false;
-    // 验证结果收集
-    $validate_result = [];
     foreach ($action_ref->getAttributes() as $attribute) {
-      if (in_array($attribute->getName(), $this->attrs + config('plugin.wegar.validate.app.methods', []))) {
-        $attribute_instance = $attribute->newInstance();
-        if (!$method_matched && property_exists($attribute_instance, 'name') && request()->method() === $attribute_instance->name) {
-          $method_matched = true;
+      $attr_name = $attribute->getName();
+      if (in_array($attr_name, $this->attrs + config('plugin.wegar.validate.app.methods', []))) {
+        $instance = $attribute->newInstance();
+        if (!property_exists($instance, 'name')) {
+          continue;
         }
-        // 因为含有注解，所以强制校验请求方式
+        if ($instance->name === request()->method()) {
+          $method_matched = true;
+          if ($instance instanceof MethodHelper) {
+            $instance->validate($action_ref);
+          }
+          continue;
+        }
         $method_force = true;
       }
     }
-    // 请求方法验证结果
-    return $method_matched && !$method_force;
+    return $method_matched || !$method_force;
   }
 }
