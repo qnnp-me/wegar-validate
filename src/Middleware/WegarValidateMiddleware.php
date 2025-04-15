@@ -51,7 +51,7 @@ class WegarValidateMiddleware implements MiddlewareInterface
     return $handler($request);
   }
 
-  protected function getCallback(): callable
+  protected function getCallback(): callable|array
   {
     return request()->route?->getCallback() ?: [request()->controller, request()->action];
   }
