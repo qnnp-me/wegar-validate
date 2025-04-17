@@ -14,9 +14,31 @@ class MethodHelper
     protected array $rules = []
   )
   {
-    if (empty(static::$rule_list)) {
-      static::$rule_list = [] + config('plugin.wegar.validate.app.rules', []);
-    }
+    // if (empty(static::$rule_list)) {
+    //   static::$rule_list = [];
+    //   $config_rules = config('plugin.wegar.validate.app.rules', []);
+    //   foreach ($config_rules as $rule_name => $rule_class) {
+    //     if (is_int($rule_name) && is_dir($rule_class)) {
+    //       $namespace = '';
+    //       foreach ((scandir($rule_class) ?? []) as $rule_file) {
+    //         if (str_ends_with($rule_file, '.php')) {
+    //           if (!$namespace) {
+    //             $file_content = file_get_contents($rule_class . DIRECTORY_SEPARATOR . $rule_file);
+    //             if (preg_match('/namespace\s+([^\s;]+)/', $file_content, $matches)) {
+    //               $namespace = $matches[1];
+    //             }
+    //           }
+    //           if ($namespace) {
+    //             $class = $namespace . '\\' . str_replace('.php', '', $rule_file);
+    //             if (class_exists($class)){
+    //               // $name =
+    //             }
+    //           }
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
   }
 
   function validate(ReflectionMethod|ReflectionFunction $action_ref): void
