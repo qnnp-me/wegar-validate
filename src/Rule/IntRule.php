@@ -20,4 +20,8 @@ class IntRule extends RuleAbstract
       throw new InputValueException($message);
     }
   }
+  public static function getDoc(): string
+  {
+    return 'This rule checks if the value is an integer';
+  }
 }

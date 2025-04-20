@@ -20,4 +20,9 @@ class Regex extends RuleAbstract
       throw new InputValueException($message);
     }
   }
+
+  public static function getDoc(): string
+  {
+    return 'This rule validates that the field matches the given regular expression.';
+  }
 }

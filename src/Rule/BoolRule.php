@@ -19,4 +19,9 @@ class BoolRule extends RuleAbstract
       throw new InputValueException($message ?: "{$field} is not a bool");
     }
   }
+
+  public static function getDoc(): string
+  {
+    return 'This rule checks if the value is a bool.';
+  }
 }

@@ -20,4 +20,8 @@ class Not extends RuleAbstract
       throw new InputValueException($message ?: 'The value of ' . $field . ' cannot be ' . implode(' or ', $args));
     }
   }
+  public static function getDoc(): string
+  {
+    return 'This rule is used to check if the value of the field is not in the list of values.';
+  }
 }

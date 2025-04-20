@@ -19,4 +19,13 @@ class Ip extends RuleAbstract
       throw new InputValueException($message ?: 'The ' . $field . ' field must be a valid IP address');
     }
   }
+
+  public static function getDoc(): string
+  {
+    return <<<MD
+This rule validates that the field is a valid IP address.
+
+See [PHP Documentation](https://www.php.net/manual/en/filter.constants.php#constant.filter-validate-ip)
+MD;
+  }
 }

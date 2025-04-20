@@ -13,4 +13,8 @@ abstract class RuleAbstract
     ?string $message = null
   ): void;
 
+  public static function getDoc(): string
+  {
+    return "no doc";
+  }
 }

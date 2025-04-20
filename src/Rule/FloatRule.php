@@ -27,4 +27,13 @@ class FloatRule extends RuleAbstract
       }
     }
   }
+
+  public static function getDoc(): string
+  {
+    return <<<MD
+This rule is used to validate float value.
+
+example: float:2 // means decimal must be 2
+MD;
+  }
 }

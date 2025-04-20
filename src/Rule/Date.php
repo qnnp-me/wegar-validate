@@ -20,4 +20,12 @@ class Date extends RuleAbstract
       throw new InputValueException($message ?: 'The ' . $field . ' field must be a valid date format: ' . $format);
     }
   }
+  public static function getDoc(): string
+  {
+    return <<<MD
+This rule checks if the value is a valid date format.
+
+example: date:Y-m-d H:i:s
+MD;
+  }
 }

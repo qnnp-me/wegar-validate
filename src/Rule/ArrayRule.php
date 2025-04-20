@@ -20,4 +20,9 @@ class ArrayRule extends RuleAbstract
       throw new InputValueException($message);
     }
   }
+
+  public static function getDoc(): string
+  {
+    return 'This rule is used to validate that the field is an array, meaning that it is a list of values.';
+  }
 }

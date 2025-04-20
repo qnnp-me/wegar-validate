@@ -17,7 +17,6 @@ class Min extends RuleAbstract
   {
     if (is_numeric($value)) {
       if ($value < $arg)
-        // 最小为 $arg 警报
         throw new InputValueException($message ?: "{$field} must be greater than or equal to {$arg}");
     } elseif (is_array($value)) {
       if (count($value) < $arg)
@@ -25,5 +24,9 @@ class Min extends RuleAbstract
     } elseif (strlen($value) < $arg) {
       throw new InputValueException($message ?: "{$field} length must be greater than or equal to {$arg}");
     }
+  }
+  public static function getDoc(): string
+  {
+    return 'This rule is used to validate the minimum length of a string or array or the minimum value of a number.';
   }
 }

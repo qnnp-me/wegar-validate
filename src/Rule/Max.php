@@ -25,4 +25,9 @@ class Max extends RuleAbstract
       throw new InputValueException($message ?: "{$field} length must be less than or equal to {$arg}");
     }
   }
+
+  public static function getDoc(): string
+  {
+    return 'This rule is used to validate the maximum length of a string or array or the maximum value of a number.';
+  }
 }

@@ -19,4 +19,9 @@ class Email extends RuleAbstract
       throw new InputValueException($message ?: "{$field} is not a valid email address");
     }
   }
+
+  public static function getDoc(): string
+  {
+    return 'This rule validates whether the value is a valid email address.';
+  }
 }

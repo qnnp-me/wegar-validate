@@ -20,4 +20,12 @@ class In extends RuleAbstract
       throw new InputValueException($message ?: "{$field} must be in {$arg}");
     }
   }
+  public static function getDoc(): string
+  {
+    return <<<MD
+This rule is used to check if the value is in the given list.
+
+example: in:1,2,3
+MD;
+  }
 }

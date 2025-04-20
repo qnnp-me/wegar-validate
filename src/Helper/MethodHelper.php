@@ -38,9 +38,9 @@ class MethodHelper
   {
     foreach ($rules as $field => $rule) {
       if (is_callable($rule)) {
-        call_user_func_array($rules, [$field, $data[$field] ?? null, $data, $parents]);
+        call_user_func_array($rule, [$field, $data[$field] ?? null, $data, $parents]);
       } elseif (is_string($rule)) {
-        $filed_rules = explode('|', $rule);
+        $filed_rules = preg_split('/(?<!\\\)\|/', $rule);
         static::executeValidate($filed_rules, $field, $data[$field] ?? null, $parents);
       } elseif (is_array($rule) && count($rule)) {
         if (array_is_list($rule)) {
@@ -48,7 +48,7 @@ class MethodHelper
             if (!str_contains($rule[0], 'array')) {
               $rule[0] .= '|array';
             }
-            $filed_rules = explode('|', $rule[0]);
+            $filed_rules = preg_split('/(?<!\\\)\|/', $rule[0]);
             static::executeValidate($filed_rules, $field, $data[$field] ?? null, $parents);
           }
           $item_rules = $rule[1] ?? $rule[0] ?? [];
@@ -63,7 +63,7 @@ class MethodHelper
             if (!str_contains($rule[0], 'object')) {
               $rule[0] .= '|object';
             }
-            $obj_rules = explode(':', $rule[0]);
+            $obj_rules = preg_split('/(?<!\\\):/', $rule[0]);
             static::executeValidate($obj_rules, $field, $data[$field] ?? null, $parents);
             unset($rule[0]);
           }
@@ -79,7 +79,13 @@ class MethodHelper
       if (is_string($rule)) {
         $rule_name = str_contains($rule, ':') ? (strstr($rule, ':', true) ?: $rule) : $rule;
         $rule_msg = self::getMessage($rule);
-        $rule_arg = str_contains($rule, ':') ? trim(strstr($rule, ':') ?: '', ':') ?: null : $rule;
+        $rule_arg = str_replace([
+          "\\|",
+          "\\:"
+        ], [
+          "|",
+          ":"
+        ], str_contains($rule, ':') ? trim(strstr($rule, ':') ?: '', ':') ?: null : $rule);
         if (isset(static::$rule_list[$rule_name]) && is_callable(static::$rule_list[$rule_name])) {
           call_user_func_array(
             static::$rule_list[$rule_name],
@@ -92,7 +98,7 @@ class MethodHelper
 
   protected static function getMessage(string &$arg): ?string
   {
-    $args = explode(':', $arg);
+    $args = preg_split('/(?<!\\\):/', $arg);
     foreach ($args as $item) {
       if (str_starts_with($item, 'msg->')) {
         $arg = preg_replace('#:?msg->[^:]*#', '', $arg);

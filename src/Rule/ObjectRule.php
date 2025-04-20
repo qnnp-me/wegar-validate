@@ -19,4 +19,8 @@ class ObjectRule extends RuleAbstract
       throw new InputValueException($message ?: "{$field} must be object");
     }
   }
+  public static function getDoc(): string
+  {
+    return "This rule checks if the field is an object, meaning an associative array.";
+  }
 }
