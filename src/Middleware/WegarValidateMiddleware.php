@@ -97,21 +97,28 @@ class WegarValidateMiddleware implements MiddlewareInterface
     $method_matched = false;
     foreach ($action_ref->getAttributes() as $attribute) {
       $attr_name = $attribute->getName();
+      // 判断是否为方法注解
       if (in_array($attr_name, $this->attrs + config('plugin.wegar.validate.app.methods', []))) {
         $instance = $attribute->newInstance();
-        if (!property_exists($instance, 'name')) {
+        if (!$instance instanceof MethodHelper) {
           continue;
         }
-        if ($instance->name === request()->method()) {
+        // 如果方法注解没有设置name，则跳过
+        if (!$instance->name) {
+          continue;
+        }
+        // 判断是否匹配到请求方法
+        if (strtoupper($instance->name) === strtoupper(request()->method())) {
           $method_matched = true;
-          if ($instance instanceof MethodHelper) {
-            $instance->validate($action_ref);
-          }
+          // 执行方法注解的validate方法
+          $instance->validate($action_ref);
           continue;
         }
+        // 因为匹配到了设置的请求方法，则强制验证
         $method_force = true;
       }
     }
+    // 如果方法注解没有匹配到，则判断是否强制验证
     return $method_matched || !$method_force;
   }
 }

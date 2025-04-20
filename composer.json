@@ -4,7 +4,7 @@
   "license": "MIT",
   "description": "Webman plugin wegar/validate",
   "require": {
-    "php": ">=8.0",
+    "php": ">=8.1",
     "workerman/webman-framework": "^1.6.11|^2.1"
   },
   "autoload": {
