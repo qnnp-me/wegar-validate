@@ -15,15 +15,21 @@ class Max extends RuleAbstract
 
   public static function validate(string $field, mixed $value, ?string $arg = null, ?string $message = null): void
   {
+    $validated = true;
     if (is_numeric($value)) {
       if ($value > $arg)
-        throw new InputValueException($message ?: "{$field} must be less than or equal to {$arg}");
+        $validated = false;
     } elseif (is_array($value)) {
       if (count($value) > $arg)
-        throw new InputValueException($message ?: "{$field} count must be less than or equal to {$arg}");
+        $validated = false;
     } elseif (strlen($value) > $arg) {
-      throw new InputValueException($message ?: "{$field} length must be less than or equal to {$arg}");
+      $validated = false;
     }
+    if (!$validated)
+      throw new InputValueException(trans($message ?: 'The %field% length or value must be less than or equal to %max%', [
+        '%field%' => $field,
+        '%max%'   => $arg
+      ], 'wegar_validate'));
   }
 
   public static function getDoc(): string

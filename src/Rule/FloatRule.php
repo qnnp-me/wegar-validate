@@ -17,13 +17,16 @@ class FloatRule extends RuleAbstract
   {
     $decimal = $arg;
     if ($value !== null && !is_float($value)) {
-      throw new InputValueException($message ?: "{$field} must be float");
+      throw new InputValueException( trans($message ?:'The %field% field must be a float', ['%field%' => $field], 'wegar_validate'));
     }
     if ($value !== null && is_numeric($decimal)) {
       $decimal = (int)$decimal;
       $value_decimal = strlen(substr(strrchr($value, '.'), 1));
       if ($value_decimal != $decimal) {
-        throw new InputValueException($message ?: "{$field} decimal must be {$decimal}");
+        throw new InputValueException( trans($message ?:'The %field% decimal must be %decimal%', [
+          '%field%'   => $field,
+          '%decimal%' => $decimal
+        ], 'wegar_validate'));
       }
     }
   }
@@ -31,9 +34,9 @@ class FloatRule extends RuleAbstract
   public static function getDoc(): string
   {
     return <<<MD
-This rule is used to validate float value.
-
-example: float:2 // means decimal must be 2
-MD;
+      This rule is used to validate float value.
+      
+      example: float:2 // means decimal must be 2
+      MD;
   }
 }

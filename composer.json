@@ -5,6 +5,7 @@
   "description": "Webman plugin wegar/validate",
   "require": {
     "php": ">=8.1",
+    "symfony/translation": "^7.2",
     "workerman/webman-framework": "^1.6.11|^2.1"
   },
   "autoload": {

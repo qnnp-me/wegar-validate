@@ -16,7 +16,7 @@ class BoolRule extends RuleAbstract
   public static function validate(string $field, mixed $value, ?string $arg = null, ?string $message = null): void
   {
     if ($value !== null && !is_bool($value)) {
-      throw new InputValueException($message ?: "{$field} is not a bool");
+      throw new InputValueException(trans($message ?: 'The %field% field must be a bool', ['%field%' => $field], 'wegar_validate'));
     }
   }
 

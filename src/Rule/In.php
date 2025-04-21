@@ -17,15 +17,19 @@ class In extends RuleAbstract
   {
     $args = explode(',', $arg);
     if ($value !== null && !in_array($value, $args)) {
-      throw new InputValueException($message ?: "{$field} must be in {$arg}");
+      throw new InputValueException( trans($message ?:'The %field% field must be in the list of %enum%', [
+        '%field%' => $field,
+        '%enum%'  => $arg
+      ], 'wegar_validate'));
     }
   }
+
   public static function getDoc(): string
   {
     return <<<MD
-This rule is used to check if the value is in the given list.
-
-example: in:1,2,3
-MD;
+      This rule is used to check if the value is in the given list.
+      
+      example: in:1,2,3
+      MD;
   }
 }

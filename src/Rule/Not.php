@@ -17,9 +17,13 @@ class Not extends RuleAbstract
   {
     $args = explode(',', $arg);
     if (in_array($value, $args)) {
-      throw new InputValueException($message ?: 'The value of ' . $field . ' cannot be ' . implode(' or ', $args));
+      throw new InputValueException(trans($message ?: 'The %field% field must not be in the list of %list%', [
+        '%field%' => $field,
+        '%list%'  => $arg
+      ], 'wegar_validate'));
     }
   }
+
   public static function getDoc(): string
   {
     return 'This rule is used to check if the value of the field is not in the list of values.';

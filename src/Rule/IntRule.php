@@ -16,10 +16,10 @@ class IntRule extends RuleAbstract
   public static function validate(string $field, mixed $value, ?string $arg = null, ?string $message = null): void
   {
     if (!(is_numeric($value) && !is_float(1 * $value) && is_int(1 * $value))) {
-      $message = $message ?: 'The ' . $field . ' field must be an integer';
-      throw new InputValueException($message);
+      throw new InputValueException(trans($message ?: 'The %field% field must be an integer', ['%field%' => $field], 'wegar_validate'));
     }
   }
+
   public static function getDoc(): string
   {
     return 'This rule checks if the value is an integer';

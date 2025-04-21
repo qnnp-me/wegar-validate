@@ -16,8 +16,7 @@ class ArrayRule extends RuleAbstract
   public static function validate(string $field, mixed $value, ?string $arg = null, ?string $message = null): void
   {
     if ($value !== null && !is_array($value)) {
-      $message = $message ?: 'The field must be an array.';
-      throw new InputValueException($message);
+      throw new InputValueException(trans($message ?: 'The %field% field must be an array', ['%field%' => $field], 'wegar_validate'));
     }
   }
 

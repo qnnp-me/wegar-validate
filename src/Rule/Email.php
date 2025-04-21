@@ -16,7 +16,7 @@ class Email extends RuleAbstract
   public static function validate(string $field, mixed $value, ?string $arg = null, ?string $message = null): void
   {
     if ($value !== null && !filter_var($value, FILTER_VALIDATE_EMAIL)) {
-      throw new InputValueException($message ?: "{$field} is not a valid email address");
+      throw new InputValueException(trans($message ?: 'The %field% field must be a valid email address', ['%field%' => $field], 'wegar_validate'));
     }
   }
 

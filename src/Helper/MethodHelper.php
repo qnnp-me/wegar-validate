@@ -37,7 +37,7 @@ class MethodHelper
   protected function validateData($data, $rules, $parents = ''): void
   {
     foreach ($rules as $field => $rule) {
-      if (is_callable($rule)) {
+      if (is_callable($rule) && !in_array($rule, ['date'])) {
         call_user_func_array($rule, [$field, $data[$field] ?? null, $data, $parents]);
       } elseif (is_string($rule)) {
         $filed_rules = preg_split('/(?<!\\\)\|/', $rule);
@@ -85,7 +85,7 @@ class MethodHelper
         ], [
           "|",
           ":"
-        ], str_contains($rule, ':') ? trim(strstr($rule, ':') ?: '', ':') ?: null : $rule);
+        ], str_contains($rule, ':') ? trim(strstr($rule, ':') ?: '', ':') ?: '' : '') ?: null;
         if (isset(static::$rule_list[$rule_name]) && is_callable(static::$rule_list[$rule_name])) {
           call_user_func_array(
             static::$rule_list[$rule_name],
