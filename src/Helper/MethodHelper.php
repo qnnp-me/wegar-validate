@@ -125,7 +125,7 @@ class MethodHelper
               if (!$namespace) {
                 $file_content = file_get_contents($rule . DIRECTORY_SEPARATOR . $rule_file);
                 if (preg_match('/namespace\s+([^\s;]+)/', $file_content, $matches)) {
-                  $namespace = $matches[1];
+                  $namespace = '\\' . $matches[1];
                 }
               }
               if ($namespace) {
