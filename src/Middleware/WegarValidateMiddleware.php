@@ -37,26 +37,26 @@ class WegarValidateMiddleware implements MiddlewareInterface
 
   public function process(Request $request, callable $handler): Response
   {
-    $callback = $this->getCallback();
+    $callback = $this->getCallback($request) ?? $handler;
     $use_notfound = !config('plugin.wegar.validate.app.throw', false);
     if (is_array($callback) && count($callback) === 2) {
       $class = $callback[0];
       if (class_exists($class)) {
-        $this->validateClassMethod($class, $callback[1], $use_notfound);
+        $this->validateClassMethod($request, $class, $callback[1], $use_notfound);
       }
     } else {
-      $this->validateFunction($callback, $use_notfound);
+      $this->validateFunction($request, $callback, $use_notfound);
     }
 
     return $handler($request);
   }
 
-  protected function getCallback(): callable|array
+  protected function getCallback(Request $request): callable|array|null
   {
-    return request()->route?->getCallback() ?: [request()->controller, request()->action];
+    return $request->route?->getCallback() ?: ($request->controller ? [$request->controller, $request->action] : null);
   }
 
-  protected function validateClassMethod(string $class, string $method, bool $use_notfound): void
+  protected function validateClassMethod(Request $request, string $class, string $method, bool $use_notfound): void
   {
     try {
       $reflection = new ReflectionClass($class);
@@ -65,7 +65,7 @@ class WegarValidateMiddleware implements MiddlewareInterface
     }
     if ($reflection->hasMethod($method)) {
       $methodRef = $reflection->getMethod($method);
-      if (!$this->checkMethod($methodRef)) {
+      if (!$this->checkMethod($request, $methodRef)) {
         $this->handleError($use_notfound);
       }
     } else {
@@ -73,14 +73,14 @@ class WegarValidateMiddleware implements MiddlewareInterface
     }
   }
 
-  protected function validateFunction(callable $callback, bool $use_notfound): void
+  protected function validateFunction(Request $request, callable $callback, bool $use_notfound): void
   {
     try {
       $functionRef = new ReflectionFunction($callback);
     } catch (ReflectionException $e) {
       $this->handleError(true);
     }
-    if (!$this->checkMethod($functionRef)) {
+    if (!$this->checkMethod($request, $functionRef)) {
       $this->handleError($use_notfound);
     }
   }
@@ -91,7 +91,7 @@ class WegarValidateMiddleware implements MiddlewareInterface
     throw new PageNotFoundException('Method not allowed', 405);
   }
 
-  protected function checkMethod(ReflectionMethod|ReflectionFunction $action_ref): bool
+  protected function checkMethod(Request $request, ReflectionMethod|ReflectionFunction $action_ref): bool
   {
     $method_force = config('plugin.wegar.validate.app.force', true);
     $method_matched = false;
@@ -108,7 +108,7 @@ class WegarValidateMiddleware implements MiddlewareInterface
           continue;
         }
         // 判断是否匹配到请求方法
-        if (strtoupper($instance->name) === strtoupper(request()->method())) {
+        if (strtoupper($instance->name) === strtoupper($request->method())) {
           $method_matched = true;
           // 执行方法注解的validate方法
           $instance->validate($action_ref);

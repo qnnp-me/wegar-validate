@@ -15,7 +15,7 @@ class Required extends RuleAbstract
 
   public static function validate(string $field, mixed $value, ?string $arg = null, ?string $message = null): void
   {
-    if (empty($value)) {
+    if ($value === null || $value === '' || $value === []) {
       throw new InputValueException(trans($message ?: 'The %field% field is required', [
         '%field%' => $field
       ], 'wegar_validate'));

@@ -17,7 +17,7 @@ class In extends RuleAbstract
   {
     $args = explode(',', $arg);
     if ($value !== null && !in_array($value, $args)) {
-      throw new InputValueException( trans($message ?:'The %field% field must be in the list of %enum%', [
+      throw new InputValueException(trans($message ?: 'The %field% field must be in the list of %enum%', [
         '%field%' => $field,
         '%enum%'  => $arg
       ], 'wegar_validate'));
@@ -26,10 +26,7 @@ class In extends RuleAbstract
 
   public static function getDoc(): string
   {
-    return <<<MD
-      This rule is used to check if the value is in the given list.
-      
-      example: in:1,2,3
-      MD;
+    return "This rule is used to check if the value is in the given list.
+example: in:1,2,3";
   }
 }

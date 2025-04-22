@@ -26,10 +26,7 @@ class Date extends RuleAbstract
 
   public static function getDoc(): string
   {
-    return <<<MD
-      This rule checks if the value is a valid date format.
-      
-      example: date:Y-m-d H:i:s
-      MD;
+    return "This rule checks if the value is a valid date format.
+example: date:Y-m-d H:i:s";
   }
 }

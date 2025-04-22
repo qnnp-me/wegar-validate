@@ -15,4 +15,5 @@ return [
   'The %field% field must be an object'                                => '字段 %field% 必须是对象',
   'The %field% field is required'                                      => '字段 %field% 不能为空',
   'The %field% field must be a valid URL'                              => '字段 %field% 必须是 URL',
+  'The %field% field must be a valid ID card number'                   => '字段 %field% 必须是合法的身份证号码',
 ];

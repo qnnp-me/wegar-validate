@@ -12,5 +12,8 @@
     "psr-4": {
       "Wegar\\Validate\\": "src"
     }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^12.1"
   }
 }
