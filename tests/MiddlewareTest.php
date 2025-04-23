@@ -2,9 +2,16 @@
 
 use support\exception\PageNotFoundException;
 use support\Request;
+use support\Translation;
 use Wegar\Validate\Annotation\Method\GET;
 use Wegar\Validate\Annotation\Method\POST;
 use Wegar\Validate\Middleware\WegarValidateMiddleware;
+
+Translation::instance('', [
+  'locale'          => 'zh_CN',
+  'fallback_locale' => ['zh_CN', 'en'],
+  'path'            => dirname(__DIR__) . '/src/Translation',
+]);
 
 class MiddlewareTest extends \PHPUnit\Framework\TestCase
 {
