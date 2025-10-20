@@ -15,7 +15,7 @@ class Regex extends RuleAbstract
 
   public static function validate(string $field, mixed $value, ?string $arg = null, ?string $message = null): void
   {
-    if ($value !== null && !preg_match($arg, $value)) {
+    if ($value !== null && !preg_match("#$arg#", $value)) {
       throw new InputValueException(trans($message ?: 'The %field% field does not match the required format: %pattern%', [
         '%field%'   => $field,
         '%pattern%' => $arg,

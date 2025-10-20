@@ -1,6 +1,6 @@
 <?php
 
-use Wegar\Validate\Middleware\WegarValidateMiddleware;
+use \Wegar\Validate\Middleware\WegarValidateMiddleware;
 
 return [
   '' => [

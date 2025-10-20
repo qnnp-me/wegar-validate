@@ -9,6 +9,7 @@ return [
   'The %field% field must be in the list of %enum%'                    => '字段 %field% 必须在 %enum% 范围内',
   'The %field% field must be an integer'                               => '字段 %field% 必须是整数',
   'The %field% field must be a valid IP address'                       => '字段 %field% 必须是 IP 地址',
+  'The %field% length must be less than or equal to %max%'             => '字段 %field% 长度必须小于等于 %max%',
   'The %field% length or value must be less than or equal to %max%'    => '字段 %field% 长度或值必须小于等于 %max%',
   'The %field% length or value must be greater than or equal to %min%' => '字段 %field% 长度或值必须大于等于 %min%',
   'The %field% field must not be in the list of %list%'                => '字段 %field% 不能在 %list% 范围内',
@@ -16,4 +17,5 @@ return [
   'The %field% field is required'                                      => '字段 %field% 不能为空',
   'The %field% field must be a valid URL'                              => '字段 %field% 必须是 URL',
   'The %field% field must be a valid ID card number'                   => '字段 %field% 必须是合法的身份证号码',
+  'The %field% field must be a bool'                                   => '字段 %field% 必须是布尔值',
 ];

@@ -15,7 +15,7 @@ class IntRule extends RuleAbstract
 
   public static function validate(string $field, mixed $value, ?string $arg = null, ?string $message = null): void
   {
-    if (!is_int(1 * $value)) {
+    if (!is_int((int)$value)) {
       throw new InputValueException(trans($message ?: 'The %field% field must be an integer', ['%field%' => $field], 'wegar_validate'));
     }
   }
